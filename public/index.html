@@ -1,0 +1,39 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta charset='utf8'>
+	<meta name='viewport' content='width=device-width'>
+
+	<title>Svelte app</title>
+
+
+	<link rel='stylesheet' href='bundle.css'>
+</head>
+    <form>
+        Имя
+        <input name="name"/>
+        <br/>
+        Телефон
+        <input name="phone">
+        <br/>
+        <input type="hidden" name="selltype" value="sell"/>
+        <input type="hidden" name="offer" value="ruchka"/>
+        <input type="hidden" name="cost" value="1999"/>
+        <input type="hidden" name="title" value="Превосходная ручка для шитья"/>
+        <input type="hidden" name="redirect" value="/upsell.php"/>
+        <button type="submit">Отправить</button>
+    </form>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <button
+        class="sellet-buy-button"
+        data-selltype='upsell'
+        data-cost='1999'
+        data-title='Очень крутой портмоне'
+    >Добавить к заказу портмоне</button>
+	<script src='bundle.js'></script>
+</body>
+</html>
