@@ -1,11 +1,11 @@
 <script>
-    import { formToJSON, getFormErrors } from './helpers/formHelpers'
+    import { HOST } from './config';
+    import { formToJSON, getFormErrors, setForm, getForm } from './helpers/formHelpers'
     import Loader from './components/Loader.svelte'
     import Modal from './components/Modal.svelte'
     let color;
-    let uiState = {
-        modalOpened: null,
-        loading: false,
+    let state = null;
+    let modalState = {
         errors: []
     };
     let form = {
@@ -20,34 +20,57 @@
     document.addEventListener('submit', function (event) {
         if (!event.target.tagName.toLowerCase() === 'form') return;
         event.preventDefault();
-        form = formToJSON(this)
-        handleLandingFormSubmit(form)
+        event.stopPropagation();
+        form = formToJSON(this);
+        handleLandingFormSubmit(setForm(form))
     }, false);
 
-    const handleLandingFormSubmit = (form) => {
-        console.log(form)
-        const errors = getFormErrors(form)
-        if (!errors) {
-            uiState.modalOpened = 'mainForm'
+    document.addEventListener('click', function (event) {
+        if (!event.target.classList.contains('sellet-buy-button')) return;
+        event.preventDefault();
+        event.stopPropagation();
+        handleLandingFormSubmit(getForm(form))
+    }, false);
+
+    async function handleLandingFormSubmit(form)  {
+        const errors = getFormErrors(form);
+        if (!errors.length) {
+            state = 'loading';
+            const res = await fetch(`${HOST}/order.php`, {
+                method: 'POST',
+                body: JSON.stringify(form)
+            });
+            state = 'thanks';
             return
         }
-        uiState.modalOpened = 'errors'
-        uiState.errors = errors
-        console.log(uiState)
+        state = 'errors';
+        modalState.errors = errors;
     }
 
+    function handleCloseModal () {
+        state = null;
+        modalState.errors = [];
+    }
 </script>
 
-{#if uiState.errors.length}
-    <Modal header="Ошибка!" errors={uiState.errors}>
-        {#each uiState.errors as error}
+
+
+{#if state === 'errors' && modalState.errors.length}
+    <Modal header="Ошибка!" onClose={handleCloseModal}>
+        {#each modalState.errors as error}
             <div class="sellet-error-message">{error}</div>
         {/each}
     </Modal>
 {/if}
 
-{#if uiState.loading}
-    <Modal header="Подождите">
+{#if state === 'loading'}
+    <Modal header="Подождите" onClose={handleCloseModal}>
         <Loader/>
+    </Modal>
+{/if}
+
+{#if state === 'thanks'}
+    <Modal header="Спасибо за заказ" onClose={handleCloseModal}>
+        Наш менеджер свяжется с вами в ближашее время!
     </Modal>
 {/if}

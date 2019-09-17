@@ -1,12 +1,13 @@
 <script>
     let header;
-    let errors;
+    let onClose;
 
-    export { header, errors }
+    export { header, onClose }
 </script>
 
 <style>
     .sellet-modal-wrapper {
+        z-index: 99999999;
     	position: fixed;
     	top: 0px;
     	left: 0px;
@@ -44,12 +45,11 @@
     }
 </style>
 
-{#if errors.length}
-    <div class='sellet-modal-wrapper'>
-        <div class='sellet-modal-inner-wrapper'>
-            <div class='sellet-modal-close' on:click="{() => { errors = [] } }">×</div>
-            <div class='sellet-modal-header'>{header}</div>
-            <div class='sellet-modal-content'><slot/></div>
-        </div>
+
+<div class='sellet-modal-wrapper'>
+    <div class='sellet-modal-inner-wrapper'>
+        <div class='sellet-modal-close' on:click={onClose}>×</div>
+        <div class='sellet-modal-header'>{header}</div>
+        <div class='sellet-modal-content'><slot/></div>
     </div>
-{/if}
+</div>
