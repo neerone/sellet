@@ -25,6 +25,16 @@ export function setForm( form ) {
     return form
 }
 
+export function makeFormData(form) {
+    var formData = new FormData();
+    if (!window.localStorage) return
+    Object.keys(form).map((k) => {
+        var v = form[k];
+        formData.append(k, v);
+    });
+    return formData
+}
+
 export function getForm( form ) {
     if ((form.name && form.phone) || !window.localStorage) return form;
     Object.keys(form).map((k) => {

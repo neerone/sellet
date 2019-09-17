@@ -1,6 +1,6 @@
 <script>
     import { HOST } from './config';
-    import { formToJSON, getFormErrors, setForm, getForm } from './helpers/formHelpers'
+    import { formToJSON, getFormErrors, setForm, getForm, makeFormData } from './helpers/formHelpers'
     import Loader from './components/Loader.svelte'
     import Modal from './components/Modal.svelte'
     let color;
@@ -38,7 +38,7 @@
             state = 'loading';
             const res = await fetch(`${HOST}/order.php`, {
                 method: 'POST',
-                body: JSON.stringify(form)
+                body: makeFormData(form)
             });
             state = 'thanks';
             return
