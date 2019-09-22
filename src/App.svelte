@@ -34,9 +34,9 @@
         if (!event.target.classList.contains('sellet-buy-button')) return;
         event.preventDefault();
         event.stopPropagation();
+        form = getForm(form)
         form = Object.assign({}, form, formFromDataAttributes(event.target));
-        setForm(form)
-        handleLandingFormSubmit(getForm(form))
+        state = 'refill';
     }, false);
 
     async function handleLandingFormSubmit(form)  {
@@ -65,7 +65,7 @@
 
 </script>
 
-{#if state === 'refill' && getKeys(errors).length}
+{#if state === 'refill'}
     <Modal header="Форма заявки" onClose={handleCloseModal}>
         <Refill onRefill={onRefill} form={form} errors={errors} />
     </Modal>

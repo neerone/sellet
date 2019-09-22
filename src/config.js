@@ -1,3 +1,15 @@
-const isDev = window.location.origin.includes('localhost')
-export const HOST = isDev ? 'https://sellet.ru' : 'https://sellet.ru';
-export const WIDGET_STYLE_PATH = isDev ? '/sellet_widget.css' : 'https://sellet.ru/widget/sellet_widget.css';
+const isLocalhost = window.location.origin.includes('localhost')
+const isLaravel = window.location.origin.includes('shopengine.test')
+
+let HOST = 'https://sellet.ru'
+if (isLocalhost || isLaravel)  HOST = 'http://shopengine.test'
+
+
+let WIDGET_STYLE_PATH = 'https://sellet.ru/widget/sellet_widget.css'
+
+if (isLocalhost)  WIDGET_STYLE_PATH = '/sellet_widget.css'
+if (isLaravel)  WIDGET_STYLE_PATH = '/widget/sellet_widget.css'
+
+export {
+    HOST, WIDGET_STYLE_PATH
+}
