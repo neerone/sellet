@@ -1,20 +1,25 @@
 <script>
     import { HOST } from './config';
-    import { formToJSON, getFormErrors, setForm, getForm, makeFormData } from './helpers/formHelpers'
+    import { formToJSON, getFormErrors, setForm, getForm, makeFormData, formFromDataAttributes } from './helpers/formHelpers'
+    import { reachGoals, getKeys } from './helpers/helpers'
     import Loader from './components/Loader.svelte'
     import Modal from './components/Modal.svelte'
+    import Refill from './components/Refill.svelte'
+    import ErrorsRender from './components/ErrorsRender.svelte'
+    import Thanks from './components/Thanks.svelte'
+
     let color;
     let state = null;
-    let modalState = {
-        errors: []
-    };
+    let errors = {};
+
     let form = {
-        name: null,
-        phone: null,
-        selltype: null,
-        cost: null,
-        offer: null,
-        title: null
+        name: '',
+        phone: '',
+        selltype: '',
+        cost: '',
+        offer: '',
+        title: '',
+        agree: false
     };
 
     document.addEventListener('submit', function (event) {
@@ -29,37 +34,46 @@
         if (!event.target.classList.contains('sellet-buy-button')) return;
         event.preventDefault();
         event.stopPropagation();
+        form = Object.assign({}, form, formFromDataAttributes(event.target));
+        setForm(form)
         handleLandingFormSubmit(getForm(form))
     }, false);
 
     async function handleLandingFormSubmit(form)  {
-        const errors = getFormErrors(form);
-        if (!errors.length) {
-            state = 'loading';
-            const res = await fetch(`${HOST}/order.php`, {
-                method: 'POST',
-                body: makeFormData(form)
-            });
-            state = 'thanks';
+        const validationErrors = getFormErrors(form);
+        if (getKeys(validationErrors).length) {
+            state = 'refill';
+            errors = validationErrors;
             return
         }
-        state = 'errors';
-        modalState.errors = errors;
+        state = 'loading';
+        reachGoals('sell-success')
+        const res = await fetch(`${HOST}/order.php`, {
+            method: 'POST',
+            body: makeFormData(form)
+        });
+        state = 'thanks';
     }
 
     function handleCloseModal () {
         state = null;
-        modalState.errors = [];
     }
+
+    function onRefill() {
+        handleLandingFormSubmit(form)
+    }
+
 </script>
 
+{#if state === 'refill' && getKeys(errors).length}
+    <Modal header="Форма заявки" onClose={handleCloseModal}>
+        <Refill onRefill={onRefill} form={form} errors={errors} />
+    </Modal>
+{/if}
 
-
-{#if state === 'errors' && modalState.errors.length}
+{#if state === 'errors' && errors.length}
     <Modal header="Ошибка!" onClose={handleCloseModal}>
-        {#each modalState.errors as error}
-            <div class="sellet-error-message">{error}</div>
-        {/each}
+        <ErrorsRender errors={errors} />
     </Modal>
 {/if}
 
@@ -71,6 +85,6 @@
 
 {#if state === 'thanks'}
     <Modal header="Спасибо за заказ" onClose={handleCloseModal}>
-        Наш менеджер свяжется с вами в ближашее время!
+        <Thanks/>
     </Modal>
 {/if}
