@@ -79,7 +79,7 @@
         <div class="svelte-form-input-group">
             <label class="svelte-form-label">
                 <input type="checkbox" class="svelte-form-input" class:error="{!!errors.phone}" name="phone" bind:checked={form.agree}>
-                Я согласен на обработку <a class="link" href="#" target="_blank">персональных данных</a> и ознакомлен с <a class="link" href="#" target="_blank">политикой конфиденциальности</a>
+                Я согласен на обработку персональных данных и ознакомлен с <a class="link" href="https://sellet.ru/politica" target="_blank">политикой конфиденциальности</a>
             </label>
 
             <span class="svelte-form-message">{errors.agree ? errors.agree : ''}</span>
