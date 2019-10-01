@@ -1,5 +1,5 @@
 <script>
-    import { HOST } from './config';
+    import { HOST, redirectDelay } from './config';
     import { formToJSON, getFormErrors, setForm, getForm, makeFormData, formFromDataAttributes } from './helpers/formHelpers'
     import { reachGoals, getKeys } from './helpers/helpers'
     import Loader from './components/Loader.svelte'
@@ -53,15 +53,24 @@
             body: makeFormData(form)
         });
         state = 'thanks';
+        return res;
     }
 
     function handleCloseModal () {
         state = null;
     }
 
-    function onRefill() {
-        handleLandingFormSubmit(form)
+    async  function onRefill() {
+        await  handleLandingFormSubmit(form)
+        makeRedirect(form)
     }
+
+    function makeRedirect(form) {
+        if (!form.redirect) return
+        setTimeout(function() {
+            window.location = form.redirect
+        }, redirectDelay)
+    }   
 
 </script>
 
