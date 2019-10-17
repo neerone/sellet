@@ -1,4 +1,6 @@
 .DS_Store
-node_modules
-public/bundle.*
 .idea
+node_modules
+public/*.css
+public/*.js
+public/*.map
