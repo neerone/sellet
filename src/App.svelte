@@ -7,6 +7,7 @@
     import Refill from './components/Refill.svelte'
     import ErrorsRender from './components/ErrorsRender.svelte'
     import Thanks from './components/Thanks.svelte'
+    import Upsell from './components/Upsell.svelte'
 
     let color;
     let state = null;
@@ -19,8 +20,21 @@
         cost: '',
         offer: '',
         title: '',
-        agree: false
+        agree: false,
+        upsells: [],
+        data_image:''
     };
+
+    let hasUpsells = false
+    let upsells = []
+    let buttonAttributeData = null 
+
+    document.addEventListener('keyup', function(e) {
+     if (e.key === "Escape") {
+         handleCloseModal()
+    }
+});
+
 
     document.addEventListener('submit', function (event) {
         if (!event.target.tagName.toLowerCase() === 'form') return;
@@ -31,15 +45,21 @@
     }, false);
 
     document.addEventListener('click', function (event) {
+        
         if (!event.target.classList.contains('sellet-buy-button')) return;
         event.preventDefault();
         event.stopPropagation();
         form = getForm(form)
-        form = Object.assign({}, form, formFromDataAttributes(event.target));
+        buttonAttributeData = formFromDataAttributes(event.target)
+        form = Object.assign({}, form, buttonAttributeData, {upsells: buttonAttributeData.upsells})
+        upsells = form.upsells ? JSON.parse(form.upsells) : null
+        console.log({upsells, form: form})
+        hasUpsells = upsells && typeof upsells === 'object' && !!upsells.length
         state = 'refill';
     }, false);
 
     async function handleLandingFormSubmit(form)  {
+        setForm(form)
         const validationErrors = getFormErrors(form);
         if (getKeys(validationErrors).length) {
             state = 'refill';
@@ -48,7 +68,7 @@
         }
         state = 'loading';
         reachGoals('sell-success')
-        const res = await fetch(`${HOST}/order.php`, {
+        const res = await fetch(`${HOST}/api/new_order`, {
             method: 'POST',
             body: makeFormData(form)
         });
@@ -60,7 +80,7 @@
         state = null;
     }
 
-    async  function onRefill() {
+    async function onRefill() {
         await  handleLandingFormSubmit(form)
         makeRedirect(form)
     }
@@ -93,7 +113,8 @@
 {/if}
 
 {#if state === 'thanks'}
-    <Modal header="Спасибо за заказ" onClose={handleCloseModal}>
+    <Modal header="Спасибо за заказ!" hasUpsells={hasUpsells} onClose={handleCloseModal}>
         <Thanks/>
+        <Upsell upsells={upsells} upsellUtpContent={JSON.parse(form.upsellutpcontent)}/>
     </Modal>
 {/if}

@@ -11,6 +11,11 @@
 </script>
 
 <style>
+    a {
+        display: inline-block;
+        text-decoration: none!important;
+        outline:none;
+    }
     .sellet-refill-form {
         display: flex;
         flex-direction: column;

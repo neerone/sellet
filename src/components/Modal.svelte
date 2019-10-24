@@ -1,9 +1,11 @@
 <script>
     import { fly, fade } from 'svelte-transitions';
+    import Upsell from './Upsell.svelte'
     let header;
     let onClose;
+    let hasUpsells = false;
 
-    export { header, onClose }
+    export { header, onClose, hasUpsells }
 </script>
 
 <style>
@@ -48,22 +50,32 @@
     }
     .sellet-modal-header {
         padding: 15px 20px;
-        border-bottom: 1px solid #dedede;;
-        font-size: 120%;
+        border-bottom: 1px solid #dedede;
+        font-size: 200%;
         line-height: 120%;
+        text-align: center;
     }
     .sellet-modal-content {
         padding: 15px 20px;
     }
+
+    .upsellmodal {
+        max-width: 700px;
+    }
+
+
+
 </style>
 
 
-<div class='sellet-modal-wrapper' transition:fade="{{ duration: 300 }}">
-    <div class="sellet-modal-prewrapper">
+<div class='sellet-modal-wrapper' transition:fade="{{ duration: 300 }}"  >
+    <div class="sellet-modal-prewrapper" class:upsellmodal={hasUpsells}>
         <div class='sellet-modal-inner-wrapper' transition:fly="{{ y: 200, duration: 300 }}">
             <div class='sellet-modal-close' on:click={onClose}>×</div>
             <div class='sellet-modal-header'>{header}</div>
-            <div class='sellet-modal-content'><slot/></div>
+            <div class='sellet-modal-content'><slot/>
+
+            </div>
         </div>
     </div>
 </div>

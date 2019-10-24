@@ -39,6 +39,15 @@ export function setForm( form ) {
     return form
 }
 
+export function getForm( form ) {
+    if (!window.localStorage) return form;
+    getKeys(form).map((k) => {
+        var v = form[k];
+        form[k] = window.localStorage.getItem(localStoragePrefix + k);
+    })
+    return form;
+}
+
 export function makeFormData(form) {
     var formData = new FormData();
     if (!window.localStorage) return
@@ -47,15 +56,6 @@ export function makeFormData(form) {
         formData.append(k, v);
     });
     return formData
-}
-
-export function getForm( form ) {
-    if (!window.localStorage) return form;
-    getKeys(form).map((k) => {
-        var v = form[k];
-        form[k] = window.localStorage.getItem(localStoragePrefix + k);
-    })
-    return form;
 }
 
 function getPhoneError(phone) {
