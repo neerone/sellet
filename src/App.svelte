@@ -53,7 +53,6 @@
         buttonAttributeData = formFromDataAttributes(event.target)
         form = Object.assign({}, form, buttonAttributeData, {upsells: buttonAttributeData.upsells})
         upsells = form.upsells ? JSON.parse(form.upsells) : null
-        console.log({upsells, form: form})
         hasUpsells = upsells && typeof upsells === 'object' && !!upsells.length
         state = 'refill';
     }, false);
