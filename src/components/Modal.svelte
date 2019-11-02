@@ -24,10 +24,14 @@
     }
     .sellet-modal-prewrapper {
         min-width: 310px;
-        max-width: 450px;
+        max-width: 550px;
         width:100%;
         position: relative;
         padding:5px;
+        overflow-y: auto;
+        max-height: 85%;
+        margin-top: 50px;
+        margin-bottom: 50px;
     }
     .sellet-modal-inner-wrapper {
         background: white;
@@ -57,6 +61,7 @@
     }
     .sellet-modal-content {
         padding: 15px 20px;
+
     }
 
     .upsellmodal {

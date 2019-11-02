@@ -1,7 +1,6 @@
 import { getKeys } from './helpers'
 import { localStoragePrefix } from '../config.js'
 
-export var cart = [];
 export function formToJSON( form ) {
 	var obj = {};
 	var elements = form.querySelectorAll( "input, select, textarea" );
@@ -38,8 +37,7 @@ export function setForm( form ) {
         window.localStorage.setItem(localStoragePrefix + k, v);
 
     });
-    cart.push(window.localStorage._sellet_title)
-    console.log(cart)
+
     return form
 }
 
@@ -50,6 +48,7 @@ export function getForm( form ) {
         form[k] = window.localStorage.getItem(localStoragePrefix + k);
 
     })
+
     return form;
 }
 

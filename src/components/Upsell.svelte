@@ -88,6 +88,7 @@
                             data-offer={upsell.name}
                             data-cost={upsell.item_price}
                             data-title={upsell.name}
+                            data-thumbimage={upsell.thumb}
                         >
                             Добавить к заказу
                         </div>
