@@ -37,6 +37,7 @@
         //добавляем первый айтем в cart_cache
         window.localStorage.setItem('cart_cache', JSON.stringify(cartPusher));
         //берём первый айтем из cart_cache в переменную
+        cart.push(JSON.parse(window.localStorage.getItem('cart_cache')));
         //пушим в actual_cart данные из перемнной, где накапливаются товары
         window.localStorage.setItem('actual_cart', JSON.stringify(cart));
         cartCounter++;
