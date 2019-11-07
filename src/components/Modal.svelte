@@ -10,6 +10,7 @@
 
 <style>
     .sellet-modal-wrapper {
+
         z-index: 99999999;
     	position: fixed;
     	top: 0;
@@ -28,7 +29,6 @@
         width:100%;
         position: relative;
         padding:5px;
-        overflow-y: auto;
         max-height: 85%;
         margin-top: 50px;
         margin-bottom: 50px;
@@ -39,6 +39,7 @@
         position: relative;
         border-radius: 5px;
         box-shadow: 0 1px 3px #0000000d;
+
     }
     .sellet-modal-close {
         display: block;
@@ -53,6 +54,7 @@
         color: #ff5b5bf2;
     }
     .sellet-modal-header {
+        overflow: hidden !important;
         padding: 15px 20px;
         border-bottom: 1px solid #dedede;
         font-size: 200%;

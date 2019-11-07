@@ -17,6 +17,7 @@
         outline:none;
     }
     .sellet-refill-form {
+        overflow: hidden;
         display: flex;
         flex-direction: column;
     }
