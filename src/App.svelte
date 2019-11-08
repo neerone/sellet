@@ -10,6 +10,7 @@
     import Thanks from './components/Thanks.svelte'
     import Upsell from './components/Upsell.svelte'
     import CartModal from './components/CartModal.svelte'
+    import Question from './components/Question.svelte'
 
     let cart = [];
     let cartPusher = {};
@@ -19,6 +20,7 @@
         if (window.localStorage.getItem('actual_cart')){
             cart = JSON.parse(window.localStorage.getItem('actual_cart'));
         }
+
     }
     initialCart();
 
@@ -100,21 +102,24 @@
         document.addEventListener('click', function (event) {
         if (!event.target.classList.contains('remove_cart_item')) return;
         var indexOfelemToBeRemoved = event.target.parentElement.id;
-        console.log('parentElementID:', indexOfelemToBeRemoved);
         var keyOfRemovedItem =  document.getElementById(indexOfelemToBeRemoved).dataset.key
-        console.log(document.getElementById(indexOfelemToBeRemoved))
-        console.log('parentElementID:', indexOfelemToBeRemoved);
          document.getElementById(indexOfelemToBeRemoved).style.display = 'none';
         //удаляем удалённый юзером элемент из локалсторадж
         var refreshedActualCart = JSON.parse(window.localStorage.getItem('actual_cart'))
         refreshedActualCart.splice(indexOfelemToBeRemoved, 1)
-        console.log(refreshedActualCart);
         window.localStorage.setItem('actual_cart', JSON.stringify(refreshedActualCart));
         if(refreshedActualCart.length === 0){
             return  "Ваша корзина пуста!"
         }
 
     }, false);
+
+    /// Есть вопросы?
+        document.addEventListener('click', function (event) {
+        if (!event.target.classList.contains('doYaHaveAnyQuestions')) return;
+        state = 'question';
+       
+        });
 
 
     async function handleLandingFormSubmit(form)  {
@@ -133,12 +138,6 @@
         });
         state = 'thanks';
         cartOnHandle();  
-/*         console.log(nicecart);
-        var cartPusher = JSON.parse(localStorage.getItem('cart_item') || '[]');
-        cartPusher.push(window.localStorage.getItem('_sellet_cart'));
-        window.localStorage.setItem('cart_item', JSON.stringify(cartPusher));
-        cart = cartPusher;   */
-        
         return res;
     }
 
@@ -171,8 +170,12 @@
 </script>
 
 {#if state === 'cart'}
-    <Modal header="Корзина" onClose={handleCloseModal}>
-        <CartModal cart={ cart } />
+    <CartModal header="Корзина" onClose={handleCloseModal} cart={ cart } />
+{/if}
+
+{#if state === 'question'}
+    <Modal header="Оставить контакт для связи" onClose={handleCloseModal}>
+        <Question />
     </Modal>
 {/if}
 
