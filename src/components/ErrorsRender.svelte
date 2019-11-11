@@ -4,9 +4,7 @@
 </script>
 
 <style>
-    .sellet-error-message {
 
-    }
 </style>
 
 {#each errors as error}
